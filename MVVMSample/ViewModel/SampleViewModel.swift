@@ -14,16 +14,16 @@ final class SampleViewModel {
     private let disposeBag = DisposeBag()
     
     private let searchWordStream = PublishSubject<String>()
-    private let eventsStream = PublishSubject<Events>()
+    private let eventsStream = PublishSubject<Events?>()
     
     private let startedAtStream = PublishSubject<String>()
     private let formattedDateStream = PublishSubject<String>()
     
     init() {
-        searchWordStream.flatMapLatest{word -> Observable<Events> in
+        searchWordStream.flatMapLatest{word -> Observable<Events?> in
             print("searchWord:\(word)")
             let model = CPSearchEventsApiModel()
-            return  model.searchEvents(word: word)
+            return  model.searchEvents(word: word).catchErrorJustReturn(nil)
         }
         .subscribe(eventsStream)
         .disposed(by: disposeBag)
@@ -65,7 +65,7 @@ extension SampleViewModel {
 // MARK: Observable
 
 extension SampleViewModel {
-    var events: Observable<Events> {
+    var events: Observable<Events?> {
         return eventsStream.asObservable()
     }
     var formattedDate: Observable<String> {

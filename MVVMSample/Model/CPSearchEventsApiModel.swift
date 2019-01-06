@@ -11,7 +11,7 @@ import RxSwift
 import Alamofire
 
 final class CPSearchEventsApiModel {
-    func searchEvents(word: String) -> Observable<Events> {
+    func searchEvents(word: String) -> Observable<Events?> {
         return Observable.create { observer in
             let url = "https://connpass.com/api/v1/event/?keyword=\(word)"
             Alamofire.request(url, method: .get, parameters: nil)

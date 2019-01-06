@@ -36,7 +36,9 @@ final class SampleTableViewController: UIViewController,UITableViewDataSource {
         // イベントの検索結果のストリームを購読する
         viewModel.events
             .subscribe(onNext: {[weak self] events in
-                self?.reloadData(events)
+                if let events = events {
+                    self?.reloadData(events)
+                }
             })
             .disposed(by: disposeBag)
     }
